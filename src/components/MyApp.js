@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import { Button, Image, NavigatorIOS, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Button,
+  Image,
+  NavigatorIOS,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import TextField from './TextFields';
 
 class MyApp extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +19,8 @@ class MyApp extends Component {
       userName: '',
       password: '',
       role: '',
-      roleChosen: false
+      roleChosen: false,
+      isDisabled: false,
     };
   }
 
@@ -21,99 +29,86 @@ class MyApp extends Component {
   }
 
   renderWelcome() {
+    const { isDisabled } = this.state;
     return (
       <View>
-        <Text style={styles.textTitle}>
-          Are you an
-        </Text>
+        <Text style={styles.textTitle}>Are you an</Text>
         <Button
-          style={styles.buttonText}
-          containerStyle={styles.buttonContainer}
-          disabledContainerStyle={styles.buttonDisabled}
+          color="blue"
           onPress={() => this.updateRole('applicant')}
           title="Applicant"
           accessibilityLabel="I am an applicant"
         />
         <Button
-          style={styles.buttonText}
-          containerStyle={styles.buttonContainer}
-          disabledContainerStyle={styles.buttonDisabled}
+          color="blue"
           onPress={() => this.updateRole('employer')}
           title="Employer"
           accessibilityLabel="I am an employer"
         />
       </View>
-    )
+    );
   }
 
   renderChoices() {
-    // const navigate = this.props.navigation;
     if (this.state.role === 'applicant') {
       return (
         <View>
           <TextField
-          styles={styles.textInputs}
-          text={this.state.userName}
-          placeholder={'Username'}
-          update={(userName) => this.setState({userName})}
+            styles={styles.textInputs}
+            text={this.state.userName}
+            placeholder={'Username'}
+            update={userName => this.setState({ userName })}
           />
           <TextField
             styles={styles.textInputs}
             text={this.state.password}
             placeholder={'Password'}
-            update={(password) => this.setState({password})}
+            update={password => this.setState({ password })}
           />
           <Button
-            style={styles.buttonText}
-            containerStyle={styles.buttonContainer}
-            disabledContainerStyle={styles.buttonDisabled}
-            onPress={() => this.onSubmit()}
-            title='Submit'
-            accessibilityLabel='Submit Information'
+            color="blue"
+            onPress={() => this.onSubmit('Profile')}
+            title="Submit"
+            accessibilityLabel="Submit Information"
           />
         </View>
-      )
+      );
     } else {
       return (
         <View>
           <TextField
-          styles={styles.textInputs}
-          text={this.state.applicantName}
-          placeholder={"Applicant's Name"}
-          update={(applicantName) => this.setState({applicantName})}
+            styles={styles.textInputs}
+            text={this.state.applicantName}
+            placeholder={"Applicant's Name"}
+            update={applicantName => this.setState({ applicantName })}
           />
           <TextField
             styles={styles.textInputs}
             text={this.state.jobId}
             placeholder={'Job Id'}
-            update={(jobId) => this.setState({jobId})}
+            update={jobId => this.setState({ jobId })}
           />
           <Button
-            style={styles.buttonText}
-            containerStyle={styles.buttonContainer}
-            disabledContainerStyle={styles.buttonDisabled}
-            onPress={() => this.onSubmit()}
-            title='Submit'
-            accessibilityLabel='Submit Information'
+            color="blue"
+            onPress={() => this.onSubmit('Resume')}
+            title="Submit"
+            accessibilityLabel="Submit Information"
           />
         </View>
-      )
+      );
     }
   }
 
-  onSubmit() {
-    console.log('submit function ->props: ', this.props);
-    // const { navigate } = this.props.navigation;
-    // navigate('Profile');
-    this.props.navigation.navigate('Profile');
+  onSubmit(nextPage) {
+    this.props.navigation.navigate(nextPage);
+    this.setState({ roleChosen: false });
   }
 
   render() {
-    console.log('role chosen: ', this.state.roleChosen);
     const { container, imageStyle, textTitle, textInputs } = styles;
     return (
       <View style={container}>
-        <Image source={require('../assets/MyResume.png')} style={imageStyle} />
+        {/* <Image source={require('../assets/MyResume.png')} style={imageStyle} /> */}
         <Text style={textTitle}>Welcome</Text>
         {this.state.roleChosen ? this.renderChoices() : this.renderWelcome()}
       </View>
@@ -123,7 +118,7 @@ class MyApp extends Component {
   componentWillUnmount() {
     this.setState({ roleChosen: false });
   }
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -151,9 +146,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 10,
   },
-  buttonText: {fontSize: 20, color: 'aqua'},
-  buttonContainer: {padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'white'},
-  buttonDisabled: {backgroundColor: 'grey'},
+  buttonText: { fontSize: 20, color: 'aqua' },
+  buttonContainer: {
+    padding: 10,
+    height: 45,
+    overflow: 'hidden',
+    borderRadius: 4,
+    backgroundColor: 'white',
+  },
+  buttonDisabled: { backgroundColor: 'grey' },
 });
 
 export default MyApp;

@@ -7,7 +7,7 @@ class Resume extends Component {
       <View>
         <Text>Resume</Text>
       </View>
-    )
+    );
   }
 }
 
